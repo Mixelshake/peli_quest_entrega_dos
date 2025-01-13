@@ -216,23 +216,21 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const messagesContainer = document.getElementById('messages-container');
+    const messageInput = document.getElementById('message');
 
-    // Solo hacer scroll al fondo cuando se carga la página por primera vez
+    // Scroll inicial al último mensaje
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-    // Guardar la posición del scroll antes de enviar el mensaje
-    let scrollPos = messagesContainer.scrollHeight - messagesContainer.scrollTop;
 
     // Manejar los botones de acceso rápido
     const buttons = document.getElementsByClassName('btn-shortcut');
     Array.from(buttons).forEach(button => {
         button.addEventListener('click', function() {
-            document.getElementById('message').value = this.value;
+            messageInput.value = this.value;
         });
     });
 
     // Manejar envío con Enter
-    document.getElementById('message').addEventListener('keypress', function(e) {
+    messageInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             document.getElementById('send-message').click();
