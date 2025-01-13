@@ -1,13 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="user-edit-link">
-        <span>
-            <a style="color: #1d242e;" href="{{ url_for('update_user', id=user_id) }}">Editar Usuario</a>
-            <i class="bi bi-person-circle" style="height: 20px;"></i>
-        </span>
+<!--Usuario y logout-->
+<div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+    <div class="dropdown">
+        <button class="btn btn-dark dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ current_user.nombre or current_user.email }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('update_user', id=current_user.id) }}">Editar Perfil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
+        </ul>
     </div>
-    <div class="container col-xxl-8 px-4 py-5">
+</div>
+
+<div class="loading-overlay">
+    <div class="loading-container">
+        <img src="{{ url_for('static', filename='pixelart_logo.png') }}" alt="Loading..." class="loading-logo">
+    </div>
+</div>
+
+
+<div class="container col-xxl-8 px-4 py-5">
+    <!-- Historial de mensajes -->
+    <div class="messages-container" id="messages-container">
         {% for message in messages %}
             {% if message.author == 'assistant' %}
                 <div class="d-flex flex-row justify-content-start mb-4">
@@ -24,60 +41,208 @@
                 </div>
             {% endif %}
         {% endfor %}
-
-        <form method="POST">
-            <div class="row">
-                <div class="input-group mb-3">
-                    {% if generos_preferidos %}
-                        {% for genero in generos_preferidos.split(",")[:3] %}
-                            <input type="submit" name="intent" value="Recomiendame una película de {{ genero.strip() }}" class="btn btn-primary btn-shortcut" />
-                        {% endfor %}
-                    {% else %}
-                        <input type="submit" class="col-sm btn btn-primary btn-shortcut" name="intent" value="Recomiendame una película de Terror" />
-                        <input type="submit" class="col-sm btn btn-primary btn-shortcut" name="intent" value="Recomiendame una película de Acción" />
-                        <input type="submit" class="col-sm btn btn-primary btn-shortcut" name="intent" value="Recomiendame una película de Comedia" />
-                    {% endif %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-group mb-3">
-                    <input id="message" name="message" required="required" class="form-control" placeholder="Enviar mensaje a PeliQuest" aria-label="Tu mensaje" aria-describedby="send-message"/>
-                    <input type="submit" class="btn btn-primary" id="send-message" name="intent" value="Enviar"/>
-                </div>
-            </div>
-        </form>
     </div>
-    <div class="loadingio-eclipse">
-        <div class="ldio-rpinwye8j0b">
-          <div></div>
+
+    <!-- Formulario de chat -->
+    <form method="POST" id="chat-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+        <!-- Botones predefinidos -->
+        <div class="shortcuts-container">
+            <div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
+                {% if generos_preferidos %}
+                    {% for genero in generos_preferidos.split(",")[:3] %}
+                        <button type="submit"
+                                name="intent"
+                                value="Recomiéndame una película de {{ genero.strip() }}"
+                                class="btn btn-primary btn-shortcut">
+                            Recomiéndame una película de {{ genero.strip() }}
+                        </button>
+                    {% endfor %}
+                {% else %}
+                    <!-- Tus botones predeterminados -->
+                {% endif %}
+            </div>
         </div>
+
+        <!-- Campo de mensaje -->
+        <div class="chat-input-container">
+            <div class="input-group">
+                <input id="message"
+                       name="message"
+                       required="required"
+                       class="form-control"
+                       placeholder="Enviar mensaje a PeliQuest"
+                       aria-label="Tu mensaje"
+                       aria-describedby="send-message"/>
+                <button type="submit"
+                        class="btn btn-primary"
+                        id="send-message"
+                        name="intent"
+                        value="Enviar">
+                    Enviar
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Loading animation -->
+<div class="loadingio-eclipse">
+    <div class="ldio-rpinwye8j0b">
+        <div></div>
     </div>
-    <script type="text/javascript">
-        window.onload = function(e){ 
-            const bottomElement = document.getElementById('message');
-            bottomElement.scrollIntoView({ behavior: 'smooth' });
+</div>
 
-            const buttons = document.getElementsByClassName('btn-shortcut');
-            for(let i = 0; i < buttons.length; i++) {
-                buttons[i].addEventListener("click", function() {
-                    document.getElementById("message").value = this.value;
-                }, false);
-            }
+<style>
+.messages-container {
+    height: calc(100vh - 300px);
+    overflow-y: auto;
+    padding: 20px;
+    margin-bottom: 20px;
+    scroll-behavior: smooth;
+}
 
-            var input = document.getElementById("message");
-            input.addEventListener("keypress", function(event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    document.getElementById("send-message").click();
-                }
-            });
+.message-assistant, .message-user {
+    max-width: 80%;
+    border-radius: 15px;
+}
 
-            document.forms[0].addEventListener("submit", function(){
-                document.getElementsByClassName("loadingio-eclipse")[0].style.display = "block";
-            });
-            
+.message-assistant {
+    background-color: #1d242e;
+    color: #fef9e3;
+}
+
+.message-user {
+    background-color: #fef9e3;
+    color: #1d242e;
+}
+
+.shortcuts-container {
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.btn-shortcut {
+    background-color: #1d242e;
+    color: #fef9e3;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-shortcut:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    background-color: #2d3441;
+}
+
+.chat-input-container {
+    position: sticky;
+    bottom: 0;
+    background-color: #b59a7d;
+    padding: 20px 0;
+}
+
+.input-group .form-control {
+    border-radius: 20px 0 0 20px;
+    border: 2px solid #1d242e;
+}
+
+.input-group .btn {
+    border-radius: 0 20px 20px 0;
+    background-color: #1d242e;
+    border: 2px solid #1d242e;
+}
+
+/* Estilo para la barra de scroll */
+.messages-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+    background: rgba(29, 36, 46, 0.1);
+    border-radius: 4px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+    background: #1d242e;
+    border-radius: 4px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+    background: #2d3441;
+}
+
+    .loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(181, 154, 125, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+}
+
+.loading-logo {
+    width: 100px;
+    height: 100px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messagesContainer = document.getElementById('messages-container');
+
+    // Solo hacer scroll al fondo cuando se carga la página por primera vez
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // Guardar la posición del scroll antes de enviar el mensaje
+    let scrollPos = messagesContainer.scrollHeight - messagesContainer.scrollTop;
+
+    // Manejar los botones de acceso rápido
+    const buttons = document.getElementsByClassName('btn-shortcut');
+    Array.from(buttons).forEach(button => {
+        button.addEventListener('click', function() {
+            document.getElementById('message').value = this.value;
+        });
+    });
+
+    // Manejar envío con Enter
+    document.getElementById('message').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('send-message').click();
         }
-        
-    </script>
+    });
+
+    // Mostrar loading al enviar
+    document.getElementById('chat-form').addEventListener('submit', function() {
+        document.querySelector('.loading-overlay').style.display = 'flex';
+    });
+});
 </script>
 {% endblock %}

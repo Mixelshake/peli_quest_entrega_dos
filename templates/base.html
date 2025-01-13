@@ -56,18 +56,6 @@
                 position: fixed;
                 top: 10px;
             }
-            /* Estilo link edicion usuario */
-            .user-edit-link {
-                display: block;
-                float: right;
-                position: fixed;
-                top: 10px;
-                right: 50px;
-                font-family: 'Port Lligat Slab', sans-serif;
-                font-size: 20px;
-                font-weight: bold;
-                color: #1d242e;
-            }
 
             /* Estilo de la imagen con animación */
             .logo img {
@@ -154,15 +142,87 @@
                 transform: translate(-50%, -50%);
             }
             .ldio-rpinwye8j0b div { box-sizing: content-box; }
+
+            .btn-shortcut {
+                margin: 5px;
+                padding: 10px 20px;
+                white-space: normal !important;
+                height: auto;
+                width: auto;
+                min-width: 200px;
+                text-align: center;
+                background-color: #1d242e;
+                border: none;
+                border-radius: 25px;
+                transition: all 0.3s ease;
+                line-height: 1.2;
+            }
+
+            .btn-shortcut:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                background-color: #2d3441;
+            }
+
+            .d-flex.justify-content-center.flex-wrap {
+                width: 100%;
+                margin: 0 auto;
+                gap: 15px;
+            }
+            .dropdown-menu {
+                background-color: #212529;
+                border: 1px solid #373b3e;
+            }
+
+            .dropdown-item {
+                color: #fff;
+            }
+
+            .dropdown-item:hover {
+                background-color: #373b3e;
+                color: #fff;
+            }
+
+            .dropdown-divider {
+                border-top: 1px solid #373b3e;
+            }
+
+            .text-danger {
+                color: #dc3545 !important;
+            }
+
+            .text-danger:hover {
+                background-color: #dc3545 !important;
+                color: #fff !important;
+            }
+            .title-link {
+                text-decoration: none;
+                color: #1d242e;
+                transition: all 0.3s ease;
+            }
+
+            .title-link:hover {
+                color: #2d3441;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+/* Si quieres agregar un efecto sutil al hover */
+.title:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+}
         </style>
 
     </head>
     <body>
-        {% block body_title %}
-            <div class="title">
-                PeliQuest (BETA)
-            </div>
-        {% endblock %}
+       {% block body_title %}
+    {% if request.endpoint != 'index' %}
+        <div class="title">
+            <a href="{{ url_for('index') }}" class="title-link">PeliQuest (BETA)</a>
+        </div>
+    {% endif %}
+{% endblock %}
         <!-- Your page content -->
         {% block content %}{% endblock %}
 

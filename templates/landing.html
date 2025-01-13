@@ -3,23 +3,112 @@
 {% block title %}Próximamente: PeliQuest{% endblock %}
 
 {% block content %}
+<div class="landing-container">
+    <!-- Título centrado -->
+    <div class="landing-title">
+        PeliQuest (BETA)
+    </div>
 
-<div class="container">
-  <!-- Imagen del logo con animación flotante -->
-  <div class="logo mb-4">
-      <img src="{{ url_for('static', filename='pixelart_logo.png') }}" alt="Logo PeliQuest" class="img-fluid">
-  </div>
+    <div class="logo mb-4">
+        <img src="{{ url_for('static', filename='pixelart_logo.png') }}" alt="Logo PeliQuest" class="img-fluid">
+    </div>
 
-  <!-- Slogan -->
-  <p class="slogan mt-4" style="font-size: 28px; color: #1d242e;">
-      <i>Tu aliado experto en encontrar películas.</i>
-  </p>
+    <!-- Slogan -->
+    <p class="slogan">
+        <i>Tu aliado experto en encontrar películas.</i>
+    </p>
 
-  <!-- Botón -->
-  <div class="mt-3">
-      <a href="chat" class="btn btn-lg px-5" style="background-color: #1d242e; color: white; border-radius: 25px;">
-          ¡Empecemos!
-      </a>
-  </div>
+    <!-- Botón -->
+    <div class="cta-button">
+        <a href="chat" class="btn btn-lg px-5">¡Empecemos!</a>
+    </div>
 </div>
+
+<style>
+    .landing-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+    }
+
+    .landing-title {
+        font-family: 'Port Lligat Slab', sans-serif;
+        font-size: 48px;
+        font-weight: bold;
+        color: #1d242e;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .logo {
+        margin-bottom: 2rem;
+    }
+
+    .logo img {
+        max-width: 200px;
+        height: auto;
+        animation: float 2s ease-in-out infinite;
+    }
+
+    .slogan {
+        font-size: 28px;
+        color: #1d242e;
+        margin: 2rem 0;
+        font-weight: 500;
+    }
+
+    .cta-button {
+        margin-top: 2rem;
+    }
+
+    .cta-button .btn {
+        background-color: #1d242e;
+        color: white;
+        border-radius: 25px;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cta-button .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(29, 36, 46, 0.3);
+        background-color: #2d3441;
+    }
+
+    /* Ocultar el título fijo del base.html en el landing */
+    .title {
+        display: none;
+    }
+
+    /* Responsive adjustments */
+    @media (max-height: 700px) {
+        .landing-container {
+            position: relative;
+            transform: none;
+            top: auto;
+            left: auto;
+            margin: 4rem auto;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .landing-title {
+            font-size: 36px;
+        }
+
+        .slogan {
+            font-size: 24px;
+        }
+
+        .logo img {
+            max-width: 150px;
+        }
+    }
+</style>
 {% endblock %}

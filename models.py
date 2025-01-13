@@ -9,26 +9,24 @@ from sqlalchemy import (
     ForeignKey,
 )
 from datetime import datetime
+from flask_login import UserMixin
+from db import db
 
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+    nombre = db.Column(db.String(80))
+    generos_preferidos = db.Column(db.String(200))
+    peliculas_favoritas = db.Column(db.String(200))
+    directores_favoritos = db.Column(db.String(200))
+    messages = db.relationship('Message', backref='user', lazy=True)
 
-class User(db.Model):
-   __tablename__ = "users"
-
-   id = Column(Integer, primary_key=True, autoincrement=True)
-   created_at = Column(DateTime, default=datetime.utcnow)
-   email = Column(String, nullable=False, unique=True)
-   nombre = Column(String, nullable=False, unique=True)
-   generos_preferidos = Column(String, nullable=False, unique=False)
-   peliculas_favoritas = Column(String, nullable=False, unique=False)
-   directores_favoritos = Column(String, nullable=False, unique=False)
-   messages = relationship("Message", back_populates="user")
-
+    def get_id(self):
+        return str(self.id)
 
 class Message(db.Model):
-   __tablename__ = "messages"
-   id = Column(Integer, primary_key=True, autoincrement=True)
-   created_at = Column(DateTime, default=datetime.utcnow)
-   content = Column(Text, nullable=False)
-   author = Column(String, nullable=False)  # 'user' or 'assistant'
-   user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-   user = relationship("User", back_populates="messages")
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    author = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

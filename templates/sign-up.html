@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+{% block title %}
+    Registro
+{% endblock %}
+
+{% block content %}
+<div class="login">
+    <h1>REGISTRO</h1>
+
+    <div class="welcome-message">
+        <p class="wow-text">¡Wow qué felicidad!</p>
+        <p>Solo estás a algunos pasos de pertenecer a la familia PeliQuest, una comunidad de cinéfilos que buscan recomendaciones especializadas. Ingresa tu mail y contraseña a continuación</p>
+    </div>
+
+    <form class="form" method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="field-container">
+            <p class="field">
+                {{ form.email(placeholder="Email", required=true) }}
+                <i class="fa fa-user"></i>
+            </p>
+
+            <p class="field">
+                {{ form.password(placeholder="Contraseña", required=true) }}
+                <i class="fa fa-lock"></i>
+            </p>
+
+            <p class="field">
+                {{ form.password_confirmation(placeholder="Confirmar Contraseña", required=true) }}
+                <i class="fa fa-lock"></i>
+            </p>
+        </div>
+
+        <p class="submit">
+            {{ form.submit(value="Registrarse") }}
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <p class="register-link">
+            Si ya tienes cuenta, <a href="{{ url_for('login') }}">inicia sesión aquí</a>.
+        </p>
+    </form>
+</div>
+
+<!-- Agregar Font Awesome para los iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Estilos -->
+<style>
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,300,400,700');
+
+body {
+    font-family: "Open Sans", sans-serif;
+    background: #b59a7d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.login {
+    width: 470px;
+    background: #b59a7d;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    overflow: hidden;
+    margin-top: 40px; /* Ajustar si es necesario */
+}
+
+.login h1 {
+    line-height: 70px;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #fef9e3;
+    background: #1d242e;
+    margin: 0;
+    padding: 10px;
+}
+
+.form {
+    padding: 30px;
+}
+
+.field-container {
+    margin-bottom: 20px;
+}
+
+.field {
+    position: relative;
+    margin-bottom: 20px;
+    background: rgba(29, 36, 46, 0.9);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.field i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fef9e3;
+    font-size: 18px;
+}
+
+.form input[type="email"],
+.form input[type="password"],
+.field input {
+    width: 100%;
+    padding: 15px 15px 15px 55px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: #fef9e3;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.form input[type="email"]:focus,
+.form input[type="password"]:focus {
+    outline: none;
+}
+
+.form input[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #1d242e;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form input[type="submit"]:hover {
+    background: #2c3544;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+    color: #1d242e;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #1d242e;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.register-link a:hover {
+    color: #2c3544;
+}
+
+.alert {
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 14px;
+    background: #1d242e;
+    color: #fef9e3;
+}
+
+::placeholder {
+    color: #fef9e3;
+    opacity: 0.7;
+}
+
+.welcome-message {
+    padding: 20px 30px;
+    text-align: center;
+    color: #1d242e;
+    background: rgba(29, 36, 46, 0.1);
+    border-radius: 10px;
+    margin: 20px 30px 10px;
+}
+
+.welcome-message p:first-child {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1d242e;
+}
+
+.welcome-message p:last-child {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.wow-text {
+    animation: zoomInGlow 2s ease-out;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1d242e;
+}
+
+@keyframes zoomInGlow {
+    0% {
+        transform: scale(0);
+        filter: brightness(2);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(1.5);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+        opacity: 1;
+    }
+}
+/* Eliminar el fondo de autocompletado */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #1d242e inset !important;
+    -webkit-text-fill-color: #fef9e3 !important;
+}
+
+
+</style>
+{% endblock %}
