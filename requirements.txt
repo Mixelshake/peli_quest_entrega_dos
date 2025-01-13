@@ -14,7 +14,9 @@ certifi==2024.8.30
 charset-normalizer==3.4.0
 click==8.1.7
 distro==1.9.0
+dnspython==2.7.0
 docutils==0.21.2
+email_validator==2.2.0
 exceptiongroup==1.2.2
 Flask==3.1.0
 Flask-Bcrypt==1.0.1
@@ -32,6 +34,7 @@ imagesize==1.4.1
 itsdangerous==2.2.0
 Jinja2==3.1.4
 jiter==0.8.2
+JustWatch==0.5.1
 libsql-client==0.3.1
 MarkupSafe==3.0.2
 multidict==6.1.0
@@ -43,6 +46,7 @@ pydantic_core==2.27.1
 Pygments==2.18.0
 python-dotenv==1.0.1
 requests==2.32.3
+simple-justwatch-python-api==0.13
 sniffio==1.3.1
 snowballstemmer==2.2.0
 Sphinx==8.1.3
